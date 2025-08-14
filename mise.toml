@@ -1,0 +1,15 @@
+[tools]
+go = "1.24.4"
+
+[tasks.dev]
+description = "Run server (Go with Air hot reload)"
+run = "air"
+
+[tasks.templ]
+description = "Generate Go code from templ files"
+run = "templ generate"
+
+[tasks.build]
+description = "Build the application"
+run = "templ generate && go build -o pocketgoat main.go"
+
