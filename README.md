@@ -156,4 +156,4 @@ Consider using a reverse proxy (nginx, Caddy) for SSL termination and additional
 
 ## License
 
-[Your license here]
+MIT
