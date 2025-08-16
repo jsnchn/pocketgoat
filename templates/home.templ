@@ -95,8 +95,19 @@ templ Home() {
 				}
 			}
 		}" x-init="init()">
-			<!-- User Avatar Menu -->
-			<div class="user-menu" x-show="user" x-cloak>
+			<!-- User Menu / Login Button -->
+			<div class="user-menu">
+				<!-- Login Button when not logged in -->
+				<button 
+					x-show="!user"
+					@click="$dispatch('open-modal', 'login-modal')"
+					class="btn"
+				>
+					Login
+				</button>
+				
+				<!-- User Avatar Menu when logged in -->
+				<div x-show="user" x-cloak>
 				<div x-data="{ open: false }" @click.outside="open = false">
 					<div @click="open = !open">
 						<img 
@@ -127,26 +138,20 @@ templ Home() {
 							<strong x-text="user?.name || 'User'"></strong>
 							<p x-text="user?.email"></p>
 						</div>
-						<a href="#profile">Profile</a>
-						<a href="#settings">Settings</a>
+						<hr>
+						<a href="/settings">Settings</a>
 						<hr>
 						<button @click="logout()">Logout</button>
 					</div>
 				</div>
 			</div>
+		</div>
 
 			<section class="hero">
 				<div class="container text-center">
 					<h1 class="mb-3">Welcome to PocketGoat</h1>
 					<p class="mb-5" style="font-size: 1.25rem; color: #6c757d;">Your pocket-sized application</p>
 					<div class="button-group">
-						<button 
-							x-show="!user"
-							@click="$dispatch('open-modal', 'login-modal')"
-							class="btn"
-						>
-							Login
-						</button>
 						<button 
 							@click="testAPI()"
 							class="btn btn-secondary"
@@ -262,9 +267,9 @@ templ Home() {
 									<button type="button" class="btn btn-secondary" style="flex: 1;" @click="otpStep = false; otpEmail = ''">Back</button>
 								</div>
 							</form>
-						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</body>
 	</html>

@@ -24,6 +24,13 @@ func main() {
 			return nil
 		})
 
+		// Settings route
+		se.Router.GET("/settings", func(e *core.RequestEvent) error {
+			component := templates.Settings()
+			templ.Handler(component).ServeHTTP(e.Response, e.Request)
+			return nil
+		})
+
 		// API routes
 		se.Router.GET("/api/hello", func(e *core.RequestEvent) error {
 			return e.JSON(http.StatusOK, map[string]string{"message": "Hello from PocketBase!"})

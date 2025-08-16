@@ -1,0 +1,227 @@
+package templates
+
+templ Settings() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>PocketGoat - Settings</title>
+			<link rel="stylesheet" href="/static/css/main.css">
+			<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+			<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.umd.js"></script>
+		</head>
+		<body x-data="{ 
+			pb: null,
+			user: null,
+			toasts: [],
+			showUserMenu: false,
+			init() {
+				this.pb = new PocketBase('http://localhost:8090');
+				// Check if user is already logged in
+				this.user = this.pb.authStore.model;
+				// Listen for auth changes
+				this.pb.authStore.onChange(() => {
+					this.user = this.pb.authStore.model;
+				});
+			},
+			get userInitial() {
+				if (!this.user) return '';
+				return (this.user.name || this.user.email || '?')[0].toUpperCase();
+			},
+			logout() {
+				this.pb.authStore.clear();
+				this.user = null;
+				this.showUserMenu = false;
+				this.addToast('Logged out successfully', 'success');
+				window.location.href = '/';
+			},
+			addToast(message, type = 'success') {
+				const id = Date.now();
+				this.toasts.push({ id, message, type });
+				setTimeout(() => {
+					this.removeToast(id);
+				}, 2000);
+			},
+			removeToast(id) {
+				this.toasts = this.toasts.filter(toast => toast.id !== id);
+			}
+		}" x-init="init()">
+			<!-- User Menu / Login Button -->
+			<div class="user-menu">
+				<!-- Login Button when not logged in -->
+				<button 
+					x-show="!user"
+					@click="window.location.href = '/'"
+					class="btn"
+				>
+					Login
+				</button>
+				
+				<!-- User Avatar Menu when logged in -->
+				<div x-show="user" x-cloak>
+					<div x-data="{ open: false }" @click.outside="open = false">
+						<div @click="open = !open">
+							<img 
+								x-show="user && user.avatar" 
+								:src="pb.files.getURL(user, user.avatar, { thumb: '40x40' })"
+								:alt="user?.name || user?.email"
+								class="avatar"
+							>
+							<div 
+								x-show="!user || !user.avatar" 
+								class="avatar-placeholder"
+								x-text="userInitial"
+							></div>
+						</div>
+						
+						<div 
+							x-show="open" 
+							x-transition:enter="transition ease-out duration-100"
+							x-transition:enter-start="transform opacity-0 scale-95"
+							x-transition:enter-end="transform opacity-100 scale-100"
+							x-transition:leave="transition ease-in duration-75"
+							x-transition:leave-start="transform opacity-100 scale-100"
+							x-transition:leave-end="transform opacity-0 scale-95"
+							class="dropdown-menu"
+							x-cloak
+						>
+							<div class="user-info">
+								<strong x-text="user?.name || 'User'"></strong>
+								<p x-text="user?.email"></p>
+							</div>
+							<hr>
+							<a href="/settings">Settings</a>
+							<hr>
+							<button @click="logout()">Logout</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container" style="margin-top: 2rem;">
+				<div style="max-width: 800px; margin: 0 auto;">
+					<h1 class="mb-4">Settings</h1>
+					
+					<!-- Profile Section -->
+					<div class="settings-section">
+						<h2 class="mb-3">Profile</h2>
+						<form @submit.prevent="$el.addToast && addToast('Profile update functionality coming soon!', 'success')">
+							<div class="form-group">
+								<label class="form-label" for="name">Display Name</label>
+								<input 
+									type="text" 
+									id="name" 
+									name="name"
+									class="input"
+									:value="user?.name || ''"
+									placeholder="Your display name"
+								/>
+							</div>
+							
+							<div class="form-group">
+								<label class="form-label" for="email">Email</label>
+								<input 
+									type="email" 
+									id="email" 
+									name="email"
+									class="input"
+									:value="user?.email || ''"
+									disabled
+									style="background-color: #f5f5f5; cursor: not-allowed;"
+								/>
+								<small style="color: #6c757d;">Email cannot be changed</small>
+							</div>
+							
+							<button type="submit" class="btn">Update Profile</button>
+						</form>
+					</div>
+					
+					<hr style="margin: 3rem 0;">
+										
+					<!-- Preferences Section -->
+					<div class="settings-section">
+						<h2 class="mb-3">Preferences</h2>
+						<form @submit.prevent="addToast('Preferences saved!', 'success')">
+							<div class="form-group">
+								<label class="form-label">
+									<input 
+										type="checkbox" 
+										style="margin-right: 0.5rem;"
+									/>
+									Email notifications
+								</label>
+								<small style="display: block; margin-left: 1.5rem; color: #6c757d;">
+									Receive email updates about your account activity
+								</small>
+							</div>
+							
+							<div class="form-group">
+								<label class="form-label">
+									<input 
+										type="checkbox" 
+										style="margin-right: 0.5rem;"
+										checked
+									/>
+									Marketing emails
+								</label>
+								<small style="display: block; margin-left: 1.5rem; color: #6c757d;">
+									Receive updates about new features and promotions
+								</small>
+							</div>
+							
+							<button type="submit" class="btn">Save Preferences</button>
+						</form>
+					</div>
+					
+					<hr style="margin: 3rem 0;">
+					
+					<!-- Danger Zone -->
+					<div class="settings-section">
+						<h2 class="mb-3" style="color: #dc3545;">Danger Zone</h2>
+						<p class="mb-3">
+							Once you delete your account, there is no going back. Please be certain.
+						</p>
+						<button 
+							class="btn"
+							style="background-color: #dc3545; border-color: #dc3545;"
+							@click="if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) { addToast('Account deletion functionality coming soon!', 'error'); }"
+						>
+							Delete Account
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Toast Container -->
+			<div class="toast-container">
+				<template x-for="toast in toasts" :key="toast.id">
+					<div 
+						x-show="true"
+						x-transition:enter="transform ease-out duration-300 transition"
+						x-transition:enter-start="translate-y-2 opacity-0"
+						x-transition:enter-end="translate-y-0 opacity-100"
+						x-transition:leave="transition ease-in duration-100"
+						x-transition:leave-start="opacity-100"
+						x-transition:leave-end="opacity-0"
+						class="toast"
+						:class="toast.type"
+					>
+						<div class="toast-message">
+							<strong x-text="toast.type === 'success' ? '✓ Success' : '⚠ Error'"></strong>
+							<br>
+							<span x-text="toast.message"></span>
+						</div>
+						<button 
+							@click="removeToast(toast.id)"
+							class="toast-close"
+							aria-label="Close"
+						>
+							✕
+						</button>
+					</div>
+				</template>
+			</div>
+		</body>
+	</html>
+}
