@@ -189,7 +189,7 @@ templ Settings() {
 						<p class="text-base-content/80 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
 						<div class="card-actions justify-end">
 							<button 
-								@click="const email = prompt('Are you sure you want to delete your account? This action cannot be undone. Please enter the email address on your account to confirm deletion.'); if(email === user?.email) { deleteAccount(); } else if(email !== null) { addToast('Email does not match. Account deletion cancelled.', 'error'); }"
+								@click="const email = prompt('Please enter the email address on your account to confirm deletion.'); if(email === user?.email) { deleteAccount(); } else if(email !== null) { addToast('Email does not match. Account deletion cancelled.', 'error'); }"
 								class="btn btn-error"
 								:disabled="deletingAccount"
 								:class="{'loading': deletingAccount}"
