@@ -1,202 +1,86 @@
 package templates
 
+import "pocketgoat/templates/layouts"
+
 templ Home() {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>PocketGoat - Home</title>
-			<link rel="stylesheet" href="/static/css/main.css">
-			<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-			<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.umd.js"></script>
-		</head>
-		<body x-data="{ 
-			pb: null,
-			user: null,
-			toasts: [],
-			otpStep: false,
-			otpEmail: '',
-			showUserMenu: false,
-			init() {
-				this.pb = new PocketBase('http://localhost:8090');
-				// Check if user is already logged in
-				this.user = this.pb.authStore.model;
-				// Listen for auth changes
-				this.pb.authStore.onChange(() => {
-					this.user = this.pb.authStore.model;
-				});
-			},
-			get userInitial() {
-				if (!this.user) return '';
-				return (this.user.name || this.user.email || '?')[0].toUpperCase();
-			},
-			logout() {
-				this.pb.authStore.clear();
-				this.user = null;
-				this.showUserMenu = false;
-				this.addToast('Logged out successfully', 'success');
-			},
-			addToast(message, type = 'success') {
-				const id = Date.now();
-				this.toasts.push({ id, message, type });
-				setTimeout(() => {
-					this.removeToast(id);
-				}, 2000);
-			},
-			removeToast(id) {
-				this.toasts = this.toasts.filter(toast => toast.id !== id);
-			},
-			async testAPI() {
-				try {
-					const response = await fetch('/api/hello');
-					const data = await response.json();
-					if (response.ok) {
-						this.addToast(data.message || 'API call successful!', 'success');
-					} else {
-						this.addToast('API call failed: ' + (data.message || 'Unknown error'), 'error');
+	@layouts.BaseLayout("PocketGoat - Home") {
+		<script>
+			// Extend the base layout data with home-specific methods
+			document.addEventListener('alpine:init', () => {
+				Alpine.data('homeData', () => ({
+					...Alpine.$data(document.body),
+					otpStep: false,
+					otpEmail: '',
+					showLoginModal: false,
+					async testAPI() {
+						try {
+							const response = await fetch('/api/hello');
+							const data = await response.json();
+							if (response.ok) {
+								this.addToast(data.message || 'API call successful!', 'success');
+							} else {
+								this.addToast('API call failed: ' + (data.message || 'Unknown error'), 'error');
+							}
+						} catch (error) {
+							this.addToast('Network error: ' + error.message, 'error');
+						}
+					},
+					async loginWithGoogle() {
+						try {
+							const authData = await this.pb.collection('users').authWithOAuth2({ provider: 'google' });
+							this.addToast('Successfully logged in with Google!', 'success');
+							this.$dispatch('close-modal', 'login-modal');
+							// Store auth data or redirect
+							console.log('Auth data:', authData);
+						} catch (error) {
+							this.addToast('Google login failed: ' + error.message, 'error');
+						}
+					},
+					async requestOTP(email) {
+						try {
+							await this.pb.collection('users').requestOTP(email);
+							this.otpEmail = email;
+							this.otpStep = true;
+							this.addToast('OTP sent to your email!', 'success');
+						} catch (error) {
+							this.addToast('Failed to send OTP: ' + error.message, 'error');
+						}
+					},
+					async verifyOTP(otpCode) {
+						try {
+							const authData = await this.pb.collection('users').authWithOTP(this.otpEmail, otpCode);
+							this.addToast('Successfully logged in!', 'success');
+							this.$dispatch('close-modal', 'login-modal');
+							this.otpStep = false;
+							this.otpEmail = '';
+							// Store auth data or redirect
+							console.log('Auth data:', authData);
+						} catch (error) {
+							this.addToast('Invalid OTP: ' + error.message, 'error');
+						}
 					}
-				} catch (error) {
-					this.addToast('Network error: ' + error.message, 'error');
-				}
-			},
-			async loginWithGoogle() {
-				try {
-					const authData = await this.pb.collection('users').authWithOAuth2({ provider: 'google' });
-					this.addToast('Successfully logged in with Google!', 'success');
-					this.$dispatch('close-modal', 'login-modal');
-					// Store auth data or redirect
-					console.log('Auth data:', authData);
-				} catch (error) {
-					this.addToast('Google login failed: ' + error.message, 'error');
-				}
-			},
-			async requestOTP(email) {
-				try {
-					await this.pb.collection('users').requestOTP(email);
-					this.otpEmail = email;
-					this.otpStep = true;
-					this.addToast('OTP sent to your email!', 'success');
-				} catch (error) {
-					this.addToast('Failed to send OTP: ' + error.message, 'error');
-				}
-			},
-			async verifyOTP(otpCode) {
-				try {
-					const authData = await this.pb.collection('users').authWithOTP(this.otpEmail, otpCode);
-					this.addToast('Successfully logged in!', 'success');
-					this.$dispatch('close-modal', 'login-modal');
-					this.otpStep = false;
-					this.otpEmail = '';
-					// Store auth data or redirect
-					console.log('Auth data:', authData);
-				} catch (error) {
-					this.addToast('Invalid OTP: ' + error.message, 'error');
-				}
-			}
-		}" x-init="init()">
-			<!-- User Menu / Login Button -->
-			<div class="user-menu">
-				<!-- Login Button when not logged in -->
-				<button 
-					x-show="!user"
-					@click="$dispatch('open-modal', 'login-modal')"
-					class="btn"
-				>
-					Login
-				</button>
-				
-				<!-- User Avatar Menu when logged in -->
-				<div x-show="user" x-cloak>
-				<div x-data="{ open: false }" @click.outside="open = false">
-					<div @click="open = !open">
-						<img 
-							x-show="user && user.avatar" 
-							:src="pb.files.getURL(user, user.avatar, { thumb: '40x40' })"
-							:alt="user?.name || user?.email"
-							class="avatar"
-						>
-						<div 
-							x-show="!user || !user.avatar" 
-							class="avatar-placeholder"
-							x-text="userInitial"
-						></div>
-					</div>
-					
-					<div 
-						x-show="open" 
-						x-transition:enter="transition ease-out duration-100"
-						x-transition:enter-start="transform opacity-0 scale-95"
-						x-transition:enter-end="transform opacity-100 scale-100"
-						x-transition:leave="transition ease-in duration-75"
-						x-transition:leave-start="transform opacity-100 scale-100"
-						x-transition:leave-end="transform opacity-0 scale-95"
-						class="dropdown-menu"
-						x-cloak
-					>
-						<div class="user-info">
-							<strong x-text="user?.name || 'User'"></strong>
-							<p x-text="user?.email"></p>
-						</div>
-						<hr>
-						<a href="/settings">Settings</a>
-						<hr>
-						<button @click="logout()">Logout</button>
-					</div>
-				</div>
-			</div>
-		</div>
+				}));
+			});
+		</script>
 
-			<section class="hero">
-				<div class="container text-center">
-					<h1 class="mb-3">Welcome to PocketGoat</h1>
-					<p class="mb-5" style="font-size: 1.25rem; color: #6c757d;">Your pocket-sized application</p>
-					<div class="button-group">
-						<button 
-							@click="testAPI()"
-							class="btn btn-secondary"
-						>
-							Test API
-						</button>
-					</div>
-				</div>
-			</section>
-
-			<!-- Toast Container -->
-			<div class="toast-container">
-				<template x-for="toast in toasts" :key="toast.id">
-					<div 
-						x-show="true"
-						x-transition:enter="transform ease-out duration-300 transition"
-						x-transition:enter-start="translate-y-2 opacity-0"
-						x-transition:enter-end="translate-y-0 opacity-100"
-						x-transition:leave="transition ease-in duration-100"
-						x-transition:leave-start="opacity-100"
-						x-transition:leave-end="opacity-0"
-						class="toast"
-						:class="toast.type"
+		<section class="hero" x-data="homeData">
+			<div class="container text-center">
+				<h1 class="mb-3">Welcome to PocketGoat</h1>
+				<p class="mb-5" style="font-size: 1.25rem; color: #6c757d;">Your pocket-sized application</p>
+				<div class="button-group">
+					<button 
+						@click="testAPI()"
+						class="btn btn-secondary"
 					>
-						<div class="toast-message">
-							<strong x-text="toast.type === 'success' ? '✓ Success' : '⚠ Error'"></strong>
-							<br>
-							<span x-text="toast.message"></span>
-						</div>
-						<button 
-							@click="removeToast(toast.id)"
-							class="toast-close"
-							aria-label="Close"
-						>
-							✕
-						</button>
-					</div>
-				</template>
+						Test API
+					</button>
+				</div>
 			</div>
 
 			<!-- Login Modal -->
 			<div 
 				class="modal"
 				:class="{ 'is-active': showLoginModal }"
-				x-data="{ showLoginModal: false }"
 				x-on:open-modal.window="if ($event.detail === 'login-modal') { showLoginModal = true; otpStep = false; otpEmail = ''; }"
 				x-on:close-modal.window="showLoginModal = false"
 				@click="if ($event.target === $el) showLoginModal = false"
@@ -267,10 +151,10 @@ templ Home() {
 									<button type="button" class="btn btn-secondary" style="flex: 1;" @click="otpStep = false; otpEmail = ''">Back</button>
 								</div>
 							</form>
+						</div>
 					</div>
 				</div>
 			</div>
-			</div>
-		</body>
-	</html>
+		</section>
+	}
 }

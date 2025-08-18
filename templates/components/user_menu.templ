@@ -1,0 +1,56 @@
+package components
+
+// UserMenu component that displays either a login button or user avatar with dropdown
+templ UserMenu() {
+	<!-- User Menu / Login Button -->
+	<div class="user-menu">
+		<!-- Login Button when not logged in -->
+		<button 
+			x-show="!user"
+			@click="$dispatch('open-modal', 'login-modal')"
+			class="btn"
+		>
+			Login
+		</button>
+		
+		<!-- User Avatar Menu when logged in -->
+		<div x-show="user" x-cloak>
+			<div x-data="{ open: false }" @click.outside="open = false">
+				<div @click="open = !open">
+					<img 
+						x-show="user && user.avatar" 
+						:src="pb.files.getURL(user, user.avatar, { thumb: '40x40' })"
+						:alt="user?.name || user?.email"
+						class="avatar"
+					>
+					<div 
+						x-show="!user || !user.avatar" 
+						class="avatar-placeholder"
+						x-text="userInitial"
+					></div>
+				</div>
+				
+				<div 
+					x-show="open" 
+					x-transition:enter="transition ease-out duration-100"
+					x-transition:enter-start="transform opacity-0 scale-95"
+					x-transition:enter-end="transform opacity-100 scale-100"
+					x-transition:leave="transition ease-in duration-75"
+					x-transition:leave-start="transform opacity-100 scale-100"
+					x-transition:leave-end="transform opacity-0 scale-95"
+					class="dropdown-menu"
+					x-cloak
+				>
+					<div class="user-info">
+						<strong x-text="user?.name || 'User'"></strong>
+						<p x-text="user?.email"></p>
+					</div>
+					<hr>
+					<a href="/settings">Settings</a>
+					<hr>
+					<button @click="logout()">Logout</button>
+				</div>
+			</div>
+		</div>
+	</div>
+}
