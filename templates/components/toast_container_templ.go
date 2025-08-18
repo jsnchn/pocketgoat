@@ -30,7 +30,7 @@ func ToastContainer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!-- Toast Container --><div class=\"toast-container\"><template x-for=\"toast in toasts\" :key=\"toast.id\"><div x-show=\"true\" x-transition:enter=\"transform ease-out duration-300 transition\" x-transition:enter-start=\"translate-y-2 opacity-0\" x-transition:enter-end=\"translate-y-0 opacity-100\" x-transition:leave=\"transition ease-in duration-100\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" class=\"toast\" :class=\"toast.type\"><div class=\"toast-message\"><strong x-text=\"toast.type === 'success' ? '✓ Success' : '⚠ Error'\"></strong><br><span x-text=\"toast.message\"></span></div><button @click=\"removeToast(toast.id)\" class=\"toast-close\" aria-label=\"Close\">✕</button></div></template></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!-- Toast Container --><div><template x-for=\"toast in toasts\" :key=\"toast.id\"><div x-show=\"true\" x-transition:enter=\"transform ease-out duration-300 transition\" x-transition:enter-start=\"translate-y-2 opacity-0\" x-transition:enter-end=\"translate-y-0 opacity-100\" x-transition:leave=\"transition ease-in duration-100\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" :data-type=\"toast.type\"><div><strong x-text=\"toast.type === 'success' ? '✓ Success' : '⚠ Error'\"></strong><br><span x-text=\"toast.message\"></span></div><button @click=\"removeToast(toast.id)\" aria-label=\"Close\">✕</button></div></template></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

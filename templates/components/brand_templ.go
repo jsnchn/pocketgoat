@@ -30,7 +30,7 @@ func Brand() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"brand\"><a href=\"/\" class=\"brand-link\"><img src=\"/static/images/logo/32x32.png\" alt=\"PocketGoat\" width=\"32\" height=\"32\" class=\"brand-logo\"> <span class=\"brand-text\">PocketGoat</span></a></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div><a href=\"/\"><img src=\"/static/images/logo/32x32.png\" alt=\"PocketGoat\" width=\"32\" height=\"32\"> <span>PocketGoat</span></a></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

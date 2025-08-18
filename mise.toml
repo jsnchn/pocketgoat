@@ -9,7 +9,11 @@ run = "air"
 description = "Generate Go code from templ files"
 run = "templ generate"
 
+[tasks.css]
+description = "Generate CSS from Tailwind"
+run = "npx @tailwindcss/cli -i tailwind.css -o pb_public/css/main.css"
+
 [tasks.build]
 description = "Build the application"
-run = "templ generate && go build -o pocketgoat main.go"
+run = "templ generate && npx @tailwindcss/cli -i tailwind.css -o pb_public/css/main.css && go build -o pocketgoat main.go"
 

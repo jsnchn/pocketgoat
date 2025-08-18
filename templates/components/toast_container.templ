@@ -3,7 +3,7 @@ package components
 // ToastContainer component for notifications
 templ ToastContainer() {
 	<!-- Toast Container -->
-	<div class="toast-container">
+	<div>
 		<template x-for="toast in toasts" :key="toast.id">
 			<div 
 				x-show="true"
@@ -13,17 +13,15 @@ templ ToastContainer() {
 				x-transition:leave="transition ease-in duration-100"
 				x-transition:leave-start="opacity-100"
 				x-transition:leave-end="opacity-0"
-				class="toast"
-				:class="toast.type"
+				:data-type="toast.type"
 			>
-				<div class="toast-message">
+				<div>
 					<strong x-text="toast.type === 'success' ? '✓ Success' : '⚠ Error'"></strong>
 					<br>
 					<span x-text="toast.message"></span>
 				</div>
 				<button 
 					@click="removeToast(toast.id)"
-					class="toast-close"
 					aria-label="Close"
 				>
 					✕

@@ -5,16 +5,16 @@ tmp_dir = "tmp"
 [build]
   args_bin = ["serve", "--http=127.0.0.1:8090"]
   bin = "./tmp/main"
-  cmd = "templ generate && go build -o ./tmp/main ."
+  cmd = "templ generate && npx @tailwindcss/cli -i tailwind.css -o pb_public/css/main.css && go build -o ./tmp/main ."
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "testdata", "pb_data"]
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "pb_data", "pb_public/css"]
   exclude_file = []
-  exclude_regex = ["_test.go", "_templ.go"]
+  exclude_regex = ["_test.go", "_templ.go", ".*\\.css$"]
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""
   include_dir = [".", "pb_public", "templates"]
-  include_ext = ["go", "tpl", "tmpl", "html", "templ", "js", "css"]
+  include_ext = ["go", "tpl", "tmpl", "html", "templ", "js"]
   include_file = []
   kill_delay = "0s"
   log = "build-errors.log"

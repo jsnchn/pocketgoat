@@ -63,15 +63,14 @@ templ Home() {
 			});
 		</script>
 
-		<section class="hero" x-data="homeData">
-			<div class="container text-center">
-				<img src="/static/images/logo/192x192.png" alt="PocketGoat Logo" width="192" height="192" class="mb-4" style="display: block; margin: 0 auto;" />
-				<h1 class="mb-3">Welcome to PocketGoat</h1>
-				<p class="mb-5" style="font-size: 1.25rem; color: #6c757d;">Your pocket-sized application</p>
-				<div class="button-group">
+		<section x-data="homeData">
+			<div>
+				<div>
+					<img src="/static/images/logo/192x192.png" alt="PocketGoat Logo" width="192" height="192" />
+					<h1>Welcome to PocketGoat</h1>
+					<p>Your pocket-sized application</p>
 					<button 
 						@click="testAPI()"
-						class="btn btn-secondary"
 					>
 						Test API
 					</button>
@@ -79,26 +78,23 @@ templ Home() {
 			</div>
 
 			<!-- Login Modal -->
-			<div 
-				class="modal"
-				:class="{ 'is-active': showLoginModal }"
+			<dialog 
+				:open="showLoginModal"
 				x-on:open-modal.window="if ($event.detail === 'login-modal') { showLoginModal = true; otpStep = false; otpEmail = ''; }"
 				x-on:close-modal.window="showLoginModal = false"
 				@click="if ($event.target === $el) showLoginModal = false"
 				@keydown.escape.window="showLoginModal = false"
 			>
-				<div class="modal-content">
-					<div class="modal-header">
-						<h3 class="modal-title">Login to your account</h3>
-						<button class="close" aria-label="close" @click="showLoginModal = false">&times;</button>
-					</div>
-					<div class="modal-body">
+				<div>
+					<form method="dialog">
+						<button @click="showLoginModal = false">✕</button>
+					</form>
+					<h3>Login to your account</h3>
+					<div>
 						<div x-show="!otpStep">
 							<button 
 								type="button"
 								@click="loginWithGoogle()"
-								class="btn btn-secondary btn-full mb-4"
-								style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
 							>
 								<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M17.64 9.20454C17.64 8.56636 17.5827 7.95272 17.4764 7.36363H9V10.845H13.8436C13.635 11.97 13.0009 12.9231 12.0477 13.5613V15.8195H14.9564C16.6582 14.2527 17.64 11.9454 17.64 9.20454Z" fill="#4285F4"/>
@@ -109,37 +105,35 @@ templ Home() {
 								Continue with Google
 							</button>
 							
-							<div class="divider">
+							<div>
 								<hr>
-								<span>or</span>
+								<span>OR</span>
 							</div>
 							
 							<form @submit.prevent="requestOTP($el.email.value)">
-								<div class="form-group">
-									<label class="form-label" for="email">Email (for OTP login)</label>
+								<div>
+									<label for="email">Email (for OTP login)</label>
 									<input 
 										type="email" 
 										id="email" 
 										name="email"
-										class="input"
 										placeholder="you@example.com"
 										required
 									/>
 								</div>
-								<button type="submit" class="btn btn-full">Send OTP</button>
+								<button type="submit">Send OTP</button>
 							</form>
 						</div>
 						
 						<div x-show="otpStep" x-cloak>
-							<p class="mb-4">Enter the OTP sent to <strong x-text="otpEmail"></strong></p>
+							<p>Enter the OTP sent to <strong x-text="otpEmail"></strong></p>
 							<form @submit.prevent="verifyOTP($el.otp.value)">
-								<div class="form-group">
-									<label class="form-label" for="otp">One-Time Password</label>
+								<div>
+									<label for="otp">One-Time Password</label>
 									<input 
 										type="text" 
 										id="otp" 
 										name="otp"
-										class="input"
 										placeholder="123456"
 										pattern="[0-9]{6}"
 										maxlength="6"
@@ -147,15 +141,15 @@ templ Home() {
 										autofocus
 									/>
 								</div>
-								<div class="button-group" style="gap: 0.5rem;">
-									<button type="submit" class="btn" style="flex: 1;">Verify OTP</button>
-									<button type="button" class="btn btn-secondary" style="flex: 1;" @click="otpStep = false; otpEmail = ''">Back</button>
+								<div>
+									<button type="submit">Verify OTP</button>
+									<button type="button" @click="otpStep = false; otpEmail = ''">Back</button>
 								</div>
 							</form>
 						</div>
 					</div>
 				</div>
-			</div>
+			</dialog>
 		</section>
 	}
 }

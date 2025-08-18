@@ -4,96 +4,91 @@ import "pocketgoat/templates/layouts"
 
 templ Settings() {
 	@layouts.BaseLayout("PocketGoat - Settings") {
-		<div class="container" style="margin-top: 2rem;">
-			<div style="max-width: 800px; margin: 0 auto;">
-				<h1 class="mb-4">Settings</h1>
+		<div>
+			<div>
+				<h1>Settings</h1>
 				
 				<!-- Profile Section -->
-				<div class="settings-section">
-					<h2 class="mb-3">Profile</h2>
-					<form @submit.prevent="$el.addToast && addToast('Profile update functionality coming soon!', 'success')">
-						<div class="form-group">
-							<label class="form-label" for="name">Display Name</label>
-							<input 
-								type="text" 
-								id="name" 
-								name="name"
-								class="input"
-								:value="user?.name || ''"
-								placeholder="Your display name"
-							/>
-						</div>
-						
-						<div class="form-group">
-							<label class="form-label" for="email">Email</label>
-							<input 
-								type="email" 
-								id="email" 
-								name="email"
-								class="input"
-								:value="user?.email || ''"
-								disabled
-								style="background-color: #f5f5f5; cursor: not-allowed;"
-							/>
-							<small style="color: #6c757d;">Email cannot be changed</small>
-						</div>
-						
-						<button type="submit" class="btn">Update Profile</button>
-					</form>
+				<div>
+					<div>
+						<h2>Profile</h2>
+						<form @submit.prevent="$el.addToast && addToast('Profile update functionality coming soon!', 'success')">
+							<div>
+								<label for="name">Display Name</label>
+								<input 
+									type="text" 
+									id="name" 
+									name="name"
+									:value="user?.name || ''"
+									placeholder="Your display name"
+								/>
+							</div>
+							
+							<div>
+								<label for="email">Email</label>
+								<input 
+									type="email" 
+									id="email" 
+									name="email"
+									:value="user?.email || ''"
+									disabled
+								/>
+								<small>Email cannot be changed</small>
+							</div>
+							
+							<div>
+								<button type="submit">Update Profile</button>
+							</div>
+						</form>
+					</div>
 				</div>
-				
-				<hr style="margin: 3rem 0;">
-				
+
 				<!-- Preferences Section -->
-				<div class="settings-section">
-					<h2 class="mb-3">Preferences</h2>
-					<form @submit.prevent="addToast('Preferences saved!', 'success')">
-						<div class="form-group">
-							<label class="form-label">
-								<input 
-									type="checkbox" 
-									style="margin-right: 0.5rem;"
-								/>
-								Email notifications
-							</label>
-							<small style="display: block; margin-left: 1.5rem; color: #6c757d;">
-								Receive email updates about your account activity
-							</small>
-						</div>
-						
-						<div class="form-group">
-							<label class="form-label">
-								<input 
-									type="checkbox" 
-									style="margin-right: 0.5rem;"
-									checked
-								/>
-								Marketing emails
-							</label>
-							<small style="display: block; margin-left: 1.5rem; color: #6c757d;">
-								Receive updates about new features and promotions
-							</small>
-						</div>
-						
-						<button type="submit" class="btn">Save Preferences</button>
-					</form>
+				<div>
+					<div>
+						<h2>Preferences</h2>
+						<form @submit.prevent="addToast('Preferences saved!', 'success')">
+							<div>
+								<label>
+									<input 
+										type="checkbox" 
+									/>
+									<span>Email notifications</span>
+									<p>Receive email updates about your account activity</p>
+								</label>
+							</div>
+							
+							<div>
+								<label>
+									<input 
+										type="checkbox" 
+										checked
+									/>
+									<span>Marketing emails</span>
+									<p>Receive updates about new features and promotions</p>
+								</label>
+							</div>
+							
+							<div>
+								<button type="submit">Save Preferences</button>
+							</div>
+						</form>
+					</div>
 				</div>
-				
-				<hr style="margin: 3rem 0;">
-				
+
 				<!-- Danger Zone -->
-				<div class="settings-section">
-					<h2 class="mb-3" style="color: #dc3545;">Danger Zone</h2>
-					<p class="mb-3">
-						Once you delete your account, there is no going back. Please be certain.
-					</p>
-					<button 
-						class="btn"
-						style="background-color: #dc3545; border-color: #dc3545;"
-						@click="if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) { addToast('Account deletion functionality coming soon!', 'error'); }"
-					>
-						Delete Account
-					</button>
+				<div>
+					<div>
+						<h2>Danger Zone</h2>
+						<p>Once you delete your account, there is no going back. Please be certain.</p>
+						<div>
+							<button 
+								@click="if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) { addToast('Account deletion functionality coming soon!', 'error'); }"
+							>
+								Delete Account
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

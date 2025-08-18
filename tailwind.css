@@ -1,0 +1,9 @@
+@import "tailwindcss" source(none);
+@source "./templates/*.{templ}";
+@plugin "daisyui";
+
+@layer utilities {
+  [x-cloak] { 
+    display: none !important; 
+  }
+}
