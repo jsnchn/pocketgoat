@@ -11,6 +11,29 @@ templ Settings() {
 					...Alpine.$data(document.body),
 					profileLoading: false,
 					preferencesLoading: false,
+					deletingAccount: false,
+					async deleteAccount() {
+						if (!this.user) {
+							this.addToast('You must be logged in to delete your account', 'error');
+							return;
+						}
+
+						this.deletingAccount = true;
+						try {
+							// Delete the user account
+							await this.pb.collection('users').delete(this.user.id);
+							
+							// Clear auth store
+							this.pb.authStore.clear();
+							
+							// Redirect to home page
+							window.location.href = '/';
+						} catch (error) {
+							console.error('Account deletion error:', error);
+							this.addToast('Failed to delete account: ' + (error.message || 'Unknown error'), 'error');
+							this.deletingAccount = false;
+						}
+					},
 					async updateProfile(event) {
 						if (!this.user) {
 							this.addToast('You must be logged in to update your profile', 'error');
@@ -166,10 +189,13 @@ templ Settings() {
 						<p class="text-base-content/80 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
 						<div class="card-actions justify-end">
 							<button 
-								@click="if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) { addToast('Account deletion functionality coming soon!', 'error'); }"
+								@click="const email = prompt('Are you sure you want to delete your account? This action cannot be undone. Please enter the email address on your account to confirm deletion.'); if(email === user?.email) { deleteAccount(); } else if(email !== null) { addToast('Email does not match. Account deletion cancelled.', 'error'); }"
 								class="btn btn-error"
+								:disabled="deletingAccount"
+								:class="{'loading': deletingAccount}"
 							>
-								Delete Account
+								<span x-show="!deletingAccount">Delete Account</span>
+								<span x-show="deletingAccount">Deleting...</span>
 							</button>
 						</div>
 					</div>
