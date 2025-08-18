@@ -1,6 +1,7 @@
 package templates
 
 import "pocketgoat/templates/layouts"
+import "pocketgoat/templates/icons"
 
 templ Home() {
 	@layouts.BaseLayout("PocketGoat - Home") {
@@ -41,6 +42,95 @@ templ Home() {
 						Test API
 					</button>
 			  </div>
+			</div>
+
+			<!-- Setup Instructions -->
+			<div class="container mx-auto p-6 max-w-6xl">
+				<h2 class="text-3xl font-bold text-center mb-8">Quick Setup Guide</h2>
+				
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<!-- Google OAuth Setup -->
+					<div class="card bg-base-100 shadow-xl">
+						<div class="card-body">
+							<div>
+								<div class="flex items-center mb-4">
+									<div class="badge badge-primary badge-lg">1</div>
+									<h3 class="card-title ml-3">Google OAuth</h3>
+								</div>
+								<p class="mb-4">Enable Google sign-in for your users</p>
+							</div>
+							<div class="divider"></div>
+							<ol class="list-decimal list-inside space-y-2 text-sm">
+								<li>Go to <a href="https://console.cloud.google.com/" target="_blank" class="link link-primary">Google Cloud Console</a></li>
+								<li>Create a new project or select existing</li>
+								<li>Enable Google+ API</li>
+								<li>Create OAuth 2.0 credentials</li>
+								<li>Add authorized redirect URI: <code class="text-xs bg-base-200 px-1 rounded">http://localhost:8090/api/oauth2-redirect</code></li>
+								<li>Copy Client ID and Secret</li>
+								<li>Open <a href="http://localhost:8090/_/" target="_blank" class="link link-primary">PocketBase Admin</a></li>
+								<li>Go to Users collection → Settings → Auth providers → Google</li>
+								<li>Paste your credentials and save</li>
+							</ol>
+						</div>
+					</div>
+
+					<!-- Email Service Setup -->
+					<div class="card bg-base-100 shadow-xl">
+						<div class="card-body">
+							<div>
+								<div class="flex items-center mb-4">
+									<div class="badge badge-primary badge-lg">2</div>
+									<h3 class="card-title ml-3">Email Service</h3>
+								</div>
+								<p class="mb-4">Send transactional emails to users</p>
+							</div>
+							<div class="divider"></div>
+							<ol class="list-decimal list-inside space-y-2 text-sm">
+								<li>Choose an email service:
+									<ul class="list-disc list-inside ml-4 mt-1">
+										<li><a href="https://sendgrid.com" target="_blank" class="link link-primary">SendGrid</a></li>
+										<li><a href="https://www.mailgun.com" target="_blank" class="link link-primary">Mailgun</a></li>
+										<li><a href="https://postmarkapp.com" target="_blank" class="link link-primary">Postmark</a></li>
+									</ul>
+								</li>
+								<li>Create an account and verify domain</li>
+								<li>Get SMTP credentials</li>
+								<li>Open <a href="http://localhost:8090/_/" target="_blank" class="link link-primary">PocketBase Admin</a></li>
+								<li>Go to Settings → Mail settings</li>
+								<li>Enable mail sending</li>
+								<li>Enter SMTP details and save</li>
+							</ol>
+						</div>
+					</div>
+
+					<!-- Payment Processing -->
+					<div class="card bg-base-100 shadow-xl">
+						<div class="card-body">
+							<div>
+								<div class="flex items-center mb-4">
+									<div class="badge badge-primary badge-lg">3</div>
+									<h3 class="card-title ml-3">Payment Processing</h3>
+								</div>
+								<p class="mb-4">Accept payments from customers</p>
+							</div>
+							<div class="divider"></div>
+							<div class="space-y-4">
+								<div class="flex flex-row items-start gap-4">
+									<span class="flex-none">@icons.Stripe()</span>
+									<p class="text-sm text-base-content/70">Coming soon - Integration with Stripe for credit card payments</p>
+								</div>
+								<div class="flex flex-row items-start gap-4">
+									<span class="size-8">@icons.Paypal()</span>
+									<p class="text-sm text-base-content/70">Coming soon - Integration with PayPal for easy checkout</p>
+								</div>
+							</div>
+							<div class="alert alert-info mt-4">
+								@icons.Info()
+								<span class="text-sm">Payment integrations will be available in the next release</span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 	}
