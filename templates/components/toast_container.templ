@@ -1,5 +1,7 @@
 package components
 
+import "pocketgoat/templates/icons"
+
 // ToastContainer component for notifications
 templ ToastContainer() {
 	<!-- Toast Container -->
@@ -19,21 +21,19 @@ templ ToastContainer() {
 					'alert-error': toast.type === 'error'
 				}"
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-					<template x-if="toast.type === 'success'">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</template>
-					<template x-if="toast.type === 'error'">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</template>
-				</svg>
+				<template x-if="toast.type === 'success'">
+					@icons.CircleCheck()
+				</template>
+				<template  x-if="toast.type === 'error'">
+					@icons.CircleAlert()
+				</template>
 				<span x-text="toast.message"></span>
 				<button 
 					@click="removeToast(toast.id)"
 					class="btn btn-sm btn-circle btn-ghost"
 					aria-label="Close"
 				>
-					✕
+					@icons.X()
 				</button>
 			</div>
 		</template>
