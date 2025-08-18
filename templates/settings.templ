@@ -4,86 +4,101 @@ import "pocketgoat/templates/layouts"
 
 templ Settings() {
 	@layouts.BaseLayout("PocketGoat - Settings") {
-		<div>
-			<div>
-				<h1>Settings</h1>
+		<div class="container mx-auto p-6 max-w-4xl">
+			<div class="space-y-6">
+				<h1 class="text-3xl font-bold">Settings</h1>
 				
 				<!-- Profile Section -->
-				<div>
-					<div>
-						<h2>Profile</h2>
+				<div class="card bg-base-200 shadow-xl border-1 border-base-300">
+					<div class="card-body">
+						<h2 class="card-title text-2xl mb-4">Profile</h2>
 						<form @submit.prevent="$el.addToast && addToast('Profile update functionality coming soon!', 'success')">
-							<div>
-								<label for="name">Display Name</label>
+							<div class="form-control w-full mb-4">
+								<label class="label" for="name">
+									<span class="label-text">Display Name</span>
+								</label>
 								<input 
 									type="text" 
 									id="name" 
 									name="name"
 									:value="user?.name || ''"
 									placeholder="Your display name"
+									class="input input-bordered w-full"
 								/>
 							</div>
 							
-							<div>
-								<label for="email">Email</label>
+							<div class="form-control w-full mb-4">
+								<label class="label" for="email">
+									<span class="label-text">Email</span>
+								</label>
 								<input 
 									type="email" 
 									id="email" 
 									name="email"
 									:value="user?.email || ''"
 									disabled
+									class="input input-bordered w-full"
 								/>
-								<small>Email cannot be changed</small>
+								<label class="label">
+									<span class="label-text-alt">Email cannot be changed</span>
+								</label>
 							</div>
 							
-							<div>
-								<button type="submit">Update Profile</button>
+							<div class="card-actions justify-end">
+								<button type="submit" class="btn btn-primary">Update Profile</button>
 							</div>
 						</form>
 					</div>
 				</div>
 
 				<!-- Preferences Section -->
-				<div>
-					<div>
-						<h2>Preferences</h2>
+				<div class="card bg-base-200 shadow-xl border-1 border-base-300">
+					<div class="card-body">
+						<h2 class="card-title text-2xl mb-4">Preferences</h2>
 						<form @submit.prevent="addToast('Preferences saved!', 'success')">
-							<div>
-								<label>
+							<div class="form-control mb-4">
+								<label class="cursor-pointer label">
+									<div>
+										<span class="label-text text-lg">Email notifications</span>
+										<p class="text-sm text-base-content/70">Receive email updates about your account activity</p>
+									</div>
 									<input 
 										type="checkbox" 
+										class="toggle toggle-primary"
 									/>
-									<span>Email notifications</span>
-									<p>Receive email updates about your account activity</p>
 								</label>
 							</div>
 							
-							<div>
-								<label>
+							<div class="form-control mb-6">
+								<label class="cursor-pointer label">
+									<div>
+										<span class="label-text text-lg">Marketing emails</span>
+										<p class="text-sm text-base-content/70">Receive updates about new features and promotions</p>
+									</div>
 									<input 
 										type="checkbox" 
 										checked
+										class="toggle toggle-primary"
 									/>
-									<span>Marketing emails</span>
-									<p>Receive updates about new features and promotions</p>
 								</label>
 							</div>
 							
-							<div>
-								<button type="submit">Save Preferences</button>
+							<div class="card-actions justify-end">
+								<button type="submit" class="btn btn-primary">Save Preferences</button>
 							</div>
 						</form>
 					</div>
 				</div>
 
 				<!-- Danger Zone -->
-				<div>
-					<div>
-						<h2>Danger Zone</h2>
-						<p>Once you delete your account, there is no going back. Please be certain.</p>
-						<div>
+				<div class="card bg-error/10 border-1 border-error shadow-xl">
+					<div class="card-body">
+						<h2 class="card-title text-2xl text-error mb-4">Danger Zone</h2>
+						<p class="text-base-content/80 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+						<div class="card-actions justify-end">
 							<button 
 								@click="if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) { addToast('Account deletion functionality coming soon!', 'error'); }"
+								class="btn btn-error"
 							>
 								Delete Account
 							</button>

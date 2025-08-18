@@ -18,8 +18,7 @@ templ BaseLayout(title string, extraScripts ...string) {
 			}
 		</head>
 		<body x-data="baseLayoutData()" x-init="init()">
-			@components.Brand()
-			@components.UserMenu()
+			@components.Header()
 			{ children... }
 			@components.ToastContainer()
 			

@@ -1,0 +1,198 @@
+package components
+
+// AuthMenu component that handles login button, user menu, and login modal
+templ AuthMenu() {
+	<div x-data="authMenuData()">
+		<!-- Login Button when not logged in -->
+		<button 
+			x-show="!user"
+			@click="showLoginModal = true; otpStep = false; otpEmail = '';"
+			class="btn btn-primary"
+		>
+			Login
+		</button>
+		
+		<!-- User Avatar Menu when logged in -->
+		<div x-show="user" x-cloak class="dropdown dropdown-end">
+			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+				<div class="w-10 rounded-full">
+					<img 
+						x-show="user && user.avatar" 
+						:src="pb.files.getURL(user, user.avatar, { thumb: '40x40' })"
+						:alt="user?.name || user?.email"
+					/>
+					<div 
+						x-show="!user || !user.avatar" 
+						class="avatar placeholder"
+					>
+						<div class="bg-primary text-primary-content rounded-full w-10">
+							<span x-text="userInitial"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul 
+				tabindex="0" 
+				class="menu menu-sm dropdown-content bg-base-200 rounded-box z-[1] mt-3 w-52 p-2 shadow border-1 border-base-300"
+			>
+				<li class="menu-title">
+					<span x-text="user?.name || 'User'"></span>
+					<span x-text="user?.email" class="text-xs opacity-60"></span>
+				</li>
+				<li><a href="/settings">Settings</a></li>
+				<li><a @click="logout()">Logout</a></li>
+			</ul>
+		</div>
+
+		<!-- Login Modal -->
+		<dialog 
+			class="modal"
+			:class="{ 'modal-open': showLoginModal }"
+			@click="if ($event.target === $el) showLoginModal = false"
+			@keydown.escape.window="showLoginModal = false"
+		>
+			<div class="modal-box">
+				<form method="dialog">
+					<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="showLoginModal = false">✕</button>
+				</form>
+				<h3 class="font-bold text-lg">Login to your account</h3>
+				<div class="py-4">
+					<div x-show="!otpStep">
+						<button 
+							type="button"
+							@click="loginWithGoogle()"
+							class="btn btn-block btn-outline mb-4"
+						>
+							<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M17.64 9.20454C17.64 8.56636 17.5827 7.95272 17.4764 7.36363H9V10.845H13.8436C13.635 11.97 13.0009 12.9231 12.0477 13.5613V15.8195H14.9564C16.6582 14.2527 17.64 11.9454 17.64 9.20454Z" fill="#4285F4"/>
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5613C11.2418 14.1013 10.2109 14.4204 9 14.4204C6.65591 14.4204 4.67182 12.8372 3.96409 10.71H0.957275V13.0418C2.43818 15.9831 5.48182 18 9 18Z" fill="#34A853"/>
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957273C0.347727 6.17318 0 7.54773 0 9C0 10.4523 0.347727 11.8268 0.957273 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/>
+							</svg>
+							Continue with Google
+						</button>
+						
+						<div class="divider">OR</div>
+						
+						<form @submit.prevent="requestOTP($el.email.value)">
+							<div class="form-control mb-4">
+								<label class="label" for="email">
+									<span class="label-text">Email (for OTP login)</span>
+								</label>
+								<input 
+									type="email" 
+									id="email" 
+									name="email"
+									class="input input-bordered"
+									placeholder="you@example.com"
+									required
+								/>
+							</div>
+							<button type="submit" class="btn btn-primary btn-block">Send OTP</button>
+						</form>
+					</div>
+					
+					<div x-show="otpStep" x-cloak>
+						<p class="mb-4">Enter the OTP sent to <strong x-text="otpEmail" class="font-semibold"></strong></p>
+						<form @submit.prevent="verifyOTP($el.otp.value)">
+							<div class="form-control mb-4">
+								<label class="label" for="otp">
+									<span class="label-text">One-Time Password</span>
+								</label>
+								<input 
+									type="text" 
+									id="otp" 
+									name="otp"
+									class="input input-bordered"
+									placeholder="123456"
+									pattern="[0-9]{6}"
+									maxlength="6"
+									required
+									autofocus
+								/>
+							</div>
+							<div class="flex gap-2">
+								<button type="submit" class="btn btn-primary flex-1">Verify OTP</button>
+								<button type="button" class="btn btn-ghost flex-1" @click="otpStep = false; otpEmail = ''">Back</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</dialog>
+	</div>
+
+	<script>
+		function authMenuData() {
+			return {
+				showLoginModal: false,
+				otpStep: false,
+				otpEmail: '',
+				pb: window.$data?.pb || null,
+				user: window.$data?.user || null,
+				get userInitial() {
+					if (!this.user) return '';
+					return (this.user.name || this.user.email || '?')[0].toUpperCase();
+				},
+				init() {
+					// Connect to the parent Alpine data
+					this.$nextTick(() => {
+						const parentData = Alpine.$data(document.body);
+						if (parentData) {
+							this.pb = parentData.pb;
+							this.user = parentData.user;
+							// Watch for auth changes
+							this.$watch(() => parentData.user, (newUser) => {
+								this.user = newUser;
+							});
+						}
+					});
+				},
+				logout() {
+					const parentData = Alpine.$data(document.body);
+					if (parentData && parentData.logout) {
+						parentData.logout();
+					}
+				},
+				addToast(message, type) {
+					const parentData = Alpine.$data(document.body);
+					if (parentData && parentData.addToast) {
+						parentData.addToast(message, type);
+					}
+				},
+				async loginWithGoogle() {
+					try {
+						const authData = await this.pb.collection('users').authWithOAuth2({ provider: 'google' });
+						this.addToast('Successfully logged in with Google!', 'success');
+						this.showLoginModal = false;
+						console.log('Auth data:', authData);
+					} catch (error) {
+						this.addToast('Google login failed: ' + error.message, 'error');
+					}
+				},
+				async requestOTP(email) {
+					try {
+						await this.pb.collection('users').requestOTP(email);
+						this.otpEmail = email;
+						this.otpStep = true;
+						this.addToast('OTP sent to your email!', 'success');
+					} catch (error) {
+						this.addToast('Failed to send OTP: ' + error.message, 'error');
+					}
+				},
+				async verifyOTP(otpCode) {
+					try {
+						const authData = await this.pb.collection('users').authWithOTP(this.otpEmail, otpCode);
+						this.addToast('Successfully logged in!', 'success');
+						this.showLoginModal = false;
+						this.otpStep = false;
+						this.otpEmail = '';
+						console.log('Auth data:', authData);
+					} catch (error) {
+						this.addToast('Invalid OTP: ' + error.message, 'error');
+					}
+				}
+			}
+		}
+	</script>
+}

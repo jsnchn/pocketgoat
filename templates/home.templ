@@ -9,9 +9,6 @@ templ Home() {
 			document.addEventListener('alpine:init', () => {
 				Alpine.data('homeData', () => ({
 					...Alpine.$data(document.body),
-					otpStep: false,
-					otpEmail: '',
-					showLoginModal: false,
 					async testAPI() {
 						try {
 							const response = await fetch('/api/hello');
@@ -24,132 +21,27 @@ templ Home() {
 						} catch (error) {
 							this.addToast('Network error: ' + error.message, 'error');
 						}
-					},
-					async loginWithGoogle() {
-						try {
-							const authData = await this.pb.collection('users').authWithOAuth2({ provider: 'google' });
-							this.addToast('Successfully logged in with Google!', 'success');
-							this.$dispatch('close-modal', 'login-modal');
-							// Store auth data or redirect
-							console.log('Auth data:', authData);
-						} catch (error) {
-							this.addToast('Google login failed: ' + error.message, 'error');
-						}
-					},
-					async requestOTP(email) {
-						try {
-							await this.pb.collection('users').requestOTP(email);
-							this.otpEmail = email;
-							this.otpStep = true;
-							this.addToast('OTP sent to your email!', 'success');
-						} catch (error) {
-							this.addToast('Failed to send OTP: ' + error.message, 'error');
-						}
-					},
-					async verifyOTP(otpCode) {
-						try {
-							const authData = await this.pb.collection('users').authWithOTP(this.otpEmail, otpCode);
-							this.addToast('Successfully logged in!', 'success');
-							this.$dispatch('close-modal', 'login-modal');
-							this.otpStep = false;
-							this.otpEmail = '';
-							// Store auth data or redirect
-							console.log('Auth data:', authData);
-						} catch (error) {
-							this.addToast('Invalid OTP: ' + error.message, 'error');
-						}
 					}
 				}));
 			});
 		</script>
 
 		<section x-data="homeData">
-			<div>
-				<div>
+			<div class="hero bg-base-100">
+			  <div class="hero-content text-center flex-col">
 					<img src="/static/images/logo/192x192.png" alt="PocketGoat Logo" width="192" height="192" />
-					<h1>Welcome to PocketGoat</h1>
-					<p>Your pocket-sized application</p>
-					<button 
+			    <div class="max-w-xl">
+			      <h1 class="text-5xl font-bold">Welcome to PocketGoat</h1>
+			      <p class="py-6">Your pocket-sized application</p>
+			    </div>
+					<button
+						class="btn btn-primary"
 						@click="testAPI()"
 					>
 						Test API
 					</button>
-				</div>
+			  </div>
 			</div>
-
-			<!-- Login Modal -->
-			<dialog 
-				:open="showLoginModal"
-				x-on:open-modal.window="if ($event.detail === 'login-modal') { showLoginModal = true; otpStep = false; otpEmail = ''; }"
-				x-on:close-modal.window="showLoginModal = false"
-				@click="if ($event.target === $el) showLoginModal = false"
-				@keydown.escape.window="showLoginModal = false"
-			>
-				<div>
-					<form method="dialog">
-						<button @click="showLoginModal = false">✕</button>
-					</form>
-					<h3>Login to your account</h3>
-					<div>
-						<div x-show="!otpStep">
-							<button 
-								type="button"
-								@click="loginWithGoogle()"
-							>
-								<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd" d="M17.64 9.20454C17.64 8.56636 17.5827 7.95272 17.4764 7.36363H9V10.845H13.8436C13.635 11.97 13.0009 12.9231 12.0477 13.5613V15.8195H14.9564C16.6582 14.2527 17.64 11.9454 17.64 9.20454Z" fill="#4285F4"/>
-									<path fill-rule="evenodd" clip-rule="evenodd" d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5613C11.2418 14.1013 10.2109 14.4204 9 14.4204C6.65591 14.4204 4.67182 12.8372 3.96409 10.71H0.957275V13.0418C2.43818 15.9831 5.48182 18 9 18Z" fill="#34A853"/>
-									<path fill-rule="evenodd" clip-rule="evenodd" d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957273C0.347727 6.17318 0 7.54773 0 9C0 10.4523 0.347727 11.8268 0.957273 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
-									<path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/>
-								</svg>
-								Continue with Google
-							</button>
-							
-							<div>
-								<hr>
-								<span>OR</span>
-							</div>
-							
-							<form @submit.prevent="requestOTP($el.email.value)">
-								<div>
-									<label for="email">Email (for OTP login)</label>
-									<input 
-										type="email" 
-										id="email" 
-										name="email"
-										placeholder="you@example.com"
-										required
-									/>
-								</div>
-								<button type="submit">Send OTP</button>
-							</form>
-						</div>
-						
-						<div x-show="otpStep" x-cloak>
-							<p>Enter the OTP sent to <strong x-text="otpEmail"></strong></p>
-							<form @submit.prevent="verifyOTP($el.otp.value)">
-								<div>
-									<label for="otp">One-Time Password</label>
-									<input 
-										type="text" 
-										id="otp" 
-										name="otp"
-										placeholder="123456"
-										pattern="[0-9]{6}"
-										maxlength="6"
-										required
-										autofocus
-									/>
-								</div>
-								<div>
-									<button type="submit">Verify OTP</button>
-									<button type="button" @click="otpStep = false; otpEmail = ''">Back</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</dialog>
 		</section>
 	}
 }
