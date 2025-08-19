@@ -6,13 +6,18 @@ A starter stack built with PocketBase, Go, Alpine.js, and Tailwindcss for rapid 
 
 ### Install mise
 
-[mise](https://mise.jdx.dev/) is a polyglot tool version manager that ensures consistent development environments.  Use mise to install Go v1.24 or higher.
+[mise](https://mise.jdx.dev/) is a polyglot tool version manager that ensures consistent development environments.
+
+Use mise to install Go v1.24 or higher. 
 
 ```bash
 # Install mise (if not already installed)
 curl https://mise.run | sh
 
-# Install all required tools automatically
+# Trust the pre-existing configuration
+mise trust
+
+# Install all required tools
 mise install
 ```
 
