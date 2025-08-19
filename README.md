@@ -90,6 +90,10 @@ Popular transactional email providers:
 - [Mailgun](https://www.mailgun.com/)
 - [Postmark](https://postmarkapp.com/)
 
+### 6. Configure Payment Provider
+
+_WIP_
+
 ## Project Structure
 
 ```
