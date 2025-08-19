@@ -10,7 +10,7 @@ import (
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 
-	"pocketgoat/templates"
+	"pocketgoat/templates/pages"
 )
 
 func main() {
@@ -19,14 +19,14 @@ func main() {
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		// Home route - specific route first
 		se.Router.GET("/", func(e *core.RequestEvent) error {
-			component := templates.Home()
+			component := pages.Home()
 			templ.Handler(component).ServeHTTP(e.Response, e.Request)
 			return nil
 		})
 
 		// Settings route
 		se.Router.GET("/settings", func(e *core.RequestEvent) error {
-			component := templates.Settings()
+			component := pages.Settings()
 			templ.Handler(component).ServeHTTP(e.Response, e.Request)
 			return nil
 		})
