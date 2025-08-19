@@ -136,8 +136,6 @@ In order to maintain a minimal pageload footprint while still providing a DRY so
 
 ## Production Deployment
 
-For production deployment:
-
 _WIP_
 
 ## License
