@@ -7,9 +7,9 @@ A Go application built with PocketBase and Templ for modern web development.
 - **Backend**: Go 1.24+ with [PocketBase](https://pocketbase.io/) for rapid development
 - **Templating**: [Templ](https://github.com/a-h/templ) for type-safe HTML templates
 - **Frontend**: [Alpine.js](https://alpinejs.dev/) for reactive UI components
-- **Styling**: Minimal custom CSS for lightweight, responsive design
+- **Styling**: [Tailwindcss](https://tailwindcss.com) and [DaisyUI](https://daisyui.com) for rapid ui development
 - **Development**: [Air](https://github.com/air-verse/air) for hot reloading
-- **Tool Management**: [mise](https://mise.jdx.dev/) for consistent development environment
+- **Tool Management**: [mise](https://mise.jdx.dev/) for consistent environment tooling
 
 ## Prerequisites
 
