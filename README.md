@@ -98,7 +98,11 @@ _WIP_
 
 ```
 ├── main.go             # Main application entry point
+├── go.mod              # Go packages
 ├── tailwind.css        # Source file for Tailwindcss related assets
+├── .air.toml           # Air Configuration
+├── mise.toml           # Mise configuration
+├── package.json        # Node packages (pnpm)
 ├── templates/          # Templ templates
 │   ├── components      # Reusable UI fragments
 │   ├── icons           # SVG icons
