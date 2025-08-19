@@ -98,6 +98,7 @@ _WIP_
 
 ```
 ├── main.go             # Main application entry point
+├── tailwind.css        # Source file for Tailwindcss related assets
 ├── templates/          # Templ templates
 │   ├── components      # Reusable UI fragments
 │   ├── icons           # SVG icons
