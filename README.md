@@ -119,18 +119,20 @@ Template files (`.templ`) are automatically transpiled to Go code before buildin
 
 ### UI Architecture
 
-The application uses [Tailwindcss](https://tailwindcss.com) and [DaisyUI](https://daisyui.com/docs/intro/) styling, providing:
+#### The application uses [Tailwindcss](https://tailwindcss.com) and [DaisyUI](https://daisyui.com/docs/intro/) styling, providing:
 - Full control over styling from template files
 - Responsive design with modern CSS features
 - No additional JS dependencies
 - Clean, semantic, and accessibility compliant HTML structure
 
-UI interactivity is handled by Alpine.js, providing:
+#### UI interactivity is handled by Alpine.js, providing:
 - Reactive data binding
 - Component state management
 - Seamless integration with server-rendered templates
 
-A note about icons - in order to maintain a minimal pageload footprint while still providing a DRY solution for icon usage, SVGs are copied directly from [lucide.dev](https://lucide.dev) and [svgl.app](https://svgl.app) and pasted into their own templ component as needed.
+#### A note about icons 
+
+In order to maintain a minimal pageload footprint while still providing a DRY solution for icon usage, SVGs are copied directly from [lucide.dev](https://lucide.dev) and [svgl.app](https://svgl.app) and pasted into their own templ component as needed.
 
 ## Production Deployment
 
