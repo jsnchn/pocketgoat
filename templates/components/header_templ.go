@@ -30,7 +30,7 @@ func Header() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"navbar\"><div class=\"flex-1\"><a href=\"/\" class=\"flex flex-row gap-1 font-bold text-xl\"><img src=\"/static/images/logo/32x32.png\" alt=\"PocketGoat\" width=\"32\" height=\"32\"> PocketGoat</a></div><div class=\"flex-none\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"navbar sticky top-0 bg-base-100 z-[10] border-b-1 border-base-300 shadow-lg\"><div class=\"flex-1\"><a href=\"/\" class=\"flex flex-row gap-1 font-bold text-xl\"><img src=\"/static/images/logo/32x32.png\" alt=\"PocketGoat\" width=\"32\" height=\"32\"> PocketGoat</a></div><div class=\"flex-none\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
