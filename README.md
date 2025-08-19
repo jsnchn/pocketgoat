@@ -130,7 +130,7 @@ Template files (`.templ`) are automatically transpiled to Go code before buildin
 - Component state management
 - Seamless integration with server-rendered templates
 
-#### A note about icons 
+#### A note about icons:
 
 In order to maintain a minimal pageload footprint while still providing a DRY solution for icon usage, SVGs are copied directly from [lucide.dev](https://lucide.dev) and [svgl.app](https://svgl.app) and pasted into their own templ component as needed.
 
