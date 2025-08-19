@@ -1,8 +1,14 @@
-<img align="right" src="https://github.com/jsnchn/pocketgoat/blob/main/pb_public/images/logo/192x192.png?raw=true" alt="PocketGoat Logo" width="192">
+<img align="right" src="https://github.com/jsnchn/pocketgoat/blob/main/pb_public/images/logo/192x192.png?raw=true" alt="Billy-bot" width="192">
 
-# PocketGoat
+<div id="toc">
+  <summary>
+      <h1>PocketGoat</h1>
+    </summary>
+</div>
 
 A starter stack built with PocketBase, Go, Alpine.js, and Tailwindcss for rapid web development.
+
+<br clear="right"/>
 
 ## Prerequisites
 
