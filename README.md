@@ -1,3 +1,5 @@
+![PocketGoat Logo](https://github.com/jsnchn/pocketgoat/blob/main/pb_public/images/logo/192x192.png?raw=true)
+
 # PocketGoat
 
 A starter stack built with PocketBase, Go, Alpine.js, and Tailwindcss for rapid web development.
