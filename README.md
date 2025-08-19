@@ -4,9 +4,6 @@
 
 A starter stack built with PocketBase, Go, Alpine.js, and Tailwindcss for rapid web development.
 
-<br clear="right"/>
-
-
 ## Prerequisites
 
 ### Install mise
