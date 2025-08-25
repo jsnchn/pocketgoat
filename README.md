@@ -112,8 +112,6 @@ Popular S3 File Storage providers
    
 ### 7. Configure Payment Provider
 
-_WIP_
-
 Consider [Stripe No-Code integration](https://docs.stripe.com/no-code/get-started)
 
 ## Project Structure
@@ -162,8 +160,6 @@ Template files (`.templ`) are automatically transpiled to Go code before buildin
 In order to maintain a minimal pageload footprint while still providing a DRY solution for icon usage, SVGs are copied directly from [lucide.dev](https://lucide.dev) and [svgl.app](https://svgl.app) and pasted into their own templ component as needed.
 
 ## Production Deployment
-
-_WIP_
 
 Consider [PocketHost](https://pockethost.io/docs).
 
