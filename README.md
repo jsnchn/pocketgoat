@@ -97,11 +97,11 @@ To enable integration with S3 compatible storage:
 1. In the PocketBase admin panel, go to **Settings** → **File storage**
 2. Enable **Use S3 Storage**
 3. Configurate your S3 storage settings:
-   - **Endpoint**
-   - **Bucket**
-   - **Region**
-   - **Access key**
-   - **Secret**
+   - **Endpoint**: The host url
+   - **Bucket**: The bucket name
+   - **Region**: The region the storage is hosted
+   - **Access key**: Access key from provider
+   - **Secret**: Secret value from provider
 
 Popular S3 File Storage providers
 - [AWS S3](https://aws.amazon.com/s3/), of course
