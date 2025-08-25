@@ -114,7 +114,7 @@ Popular S3 File Storage providers
 
 _WIP_
 
-Consider (Stripe No-Code integration)[https://docs.stripe.com/no-code/get-started].
+Consider [Stripe No-Code integratio](https://docs.stripe.com/no-code/get-started)
 
 ## Project Structure
 
