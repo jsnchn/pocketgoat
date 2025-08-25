@@ -90,9 +90,31 @@ Popular transactional email providers:
 - [Mailgun](https://www.mailgun.com/)
 - [Postmark](https://postmarkapp.com/)
 
-### 6. Configure Payment Provider
+### 6. Configure File Storage (S3)
+
+To enable integration with S3 compatible storage:
+
+1. In the PocketBase admin panel, go to **Settings** → **File storage**
+2. Enable **Use S3 Storage**
+3. Configurate your S3 storage settings:
+   - **Endpoint**
+   - **Bucket**
+   - **Region**
+   - **Access key**
+   - **Secret**
+
+Popular S3 File Storage providers
+- [AWS S3](https://aws.amazon.com/s3/), of course
+- [Cloudflare R2](https://www.cloudflare.com/developer-platform/solutions/s3-compatible-object-storage/)
+- [Digital Ocean Spaces](https://www.digitalocean.com/products/spaces)
+- [Backblaze B2](https://www.backblaze.com/cloud-storage)
+- [Wasabi](https://wasabi.com)
+   
+### 7. Configure Payment Provider
 
 _WIP_
+
+Consider (Stripe No-Code integration)[https://docs.stripe.com/no-code/get-started].
 
 ## Project Structure
 
@@ -142,6 +164,8 @@ In order to maintain a minimal pageload footprint while still providing a DRY so
 ## Production Deployment
 
 _WIP_
+
+Consider (PocketHost)[https://pockethost.io/docs].
 
 ## License
 
